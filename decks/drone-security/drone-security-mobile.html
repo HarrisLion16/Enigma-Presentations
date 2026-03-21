@@ -46,8 +46,10 @@
       position: fixed;
       top: 8px;
       left: 12px;
-      height: 16px;
+      max-height: 16px;
+      height: auto;
       width: auto;
+      max-width: 120px;
       opacity: 0.7;
       z-index: 10;
       pointer-events: none;
@@ -184,6 +186,24 @@
       50% { transform: rotate(90deg); }
     }
 
+    @keyframes drawLine {
+      from { stroke-dashoffset: 1000; }
+      to { stroke-dashoffset: 0; }
+    }
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+    @keyframes routePulse {
+      0% { opacity: 0.3; stroke-width: 2; }
+      50% { opacity: 1; stroke-width: 3; }
+      100% { opacity: 0.3; stroke-width: 2; }
+    }
+    @keyframes lineShimmer {
+      0% { stroke-dashoffset: 0; }
+      100% { stroke-dashoffset: -40; }
+    }
+
     @media (orientation: portrait) and (max-width: 1024px) {
       .portrait-overlay { display: flex; }
     }
@@ -196,10 +216,35 @@
       justify-content: center;
       height: 100%;
       text-align: center;
+      position: relative;
+    }
+    .s1-mesh-bg {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 700px;
+      height: 120px;
+      z-index: 0;
+      opacity: 0.4;
+    }
+    .s1-mesh-line {
+      stroke: #1E293B;
+      stroke-width: 1;
+      fill: none;
+      stroke-dasharray: 1000;
+      stroke-dashoffset: 1000;
+      animation: drawLine 1.5s ease forwards;
+    }
+    .s1-mesh-node {
+      animation: pulseGlow 3s ease-in-out infinite;
     }
     .s1-hero-logo {
-      height: 48px;
+      max-height: 48px;
+      height: auto;
       width: auto;
+      max-width: 80%;
       margin-bottom: 12px;
     }
     .s1-overline {
@@ -456,9 +501,12 @@
       background-clip: text;
       margin-bottom: 2px;
     }
+    .s8-phase-icon { width: 26px; height: 26px; margin-bottom: 4px; }
     .s8-phase-title { font: 600 12px/1.3 var(--font-heading); color: var(--text-heading); }
 
     /* ===== SLIDE 9 - BVLOS ===== */
+    .s9-visual { text-align: center; margin-bottom: 6px; }
+    .s9-visual svg { width: 100%; max-height: 140px; }
     .s9-benefits { display: flex; flex-direction: column; gap: 6px; }
     .s9-benefit {
       background: var(--bg-card);
@@ -472,6 +520,19 @@
     /* ===== SLIDE 10 - SWARM ===== */
     .s10-svg-wrap { text-align: center; margin-bottom: 8px; }
     .s10-svg-wrap svg { max-height: 120px; width: auto; }
+    .s10-mesh-line {
+      stroke: var(--accent-primary);
+      stroke-width: 1.5;
+      stroke-dasharray: 6 4;
+      animation: lineShimmer 2s linear infinite;
+    }
+    .s10-mesh-line-alt {
+      stroke: var(--accent-secondary);
+      stroke-width: 1.5;
+      stroke-dasharray: 6 4;
+      animation: lineShimmer 2s linear infinite;
+      animation-delay: 0.5s;
+    }
     .s10-attrs {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -533,12 +594,25 @@
       align-items: center;
       gap: 6px;
     }
-    .s12-dot {
-      width: 8px;
-      height: 8px;
+    .s12-check {
+      width: 14px;
+      height: 14px;
       border-radius: 50%;
-      background: var(--status-success);
+      background: rgba(16,185,129,0.15);
+      border: 1px solid var(--status-success);
+      display: flex;
+      align-items: center;
+      justify-content: center;
       flex-shrink: 0;
+    }
+    .s12-check svg {
+      width: 10px;
+      height: 10px;
+      stroke: var(--status-success);
+      fill: none;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
     }
     .s12-item-title { font: 600 11px/1.3 var(--font-heading); color: var(--text-heading); }
 
@@ -580,7 +654,7 @@
       height: 100%;
       text-align: center;
     }
-    .s14-hero-logo { height: 40px; width: auto; margin-bottom: 12px; }
+    .s14-hero-logo { max-height: 40px; height: auto; width: auto; max-width: 80%; margin-bottom: 12px; }
     .s14-title { font: 700 20px/1.2 var(--font-heading); color: var(--text-heading); margin-bottom: 6px; }
     .s14-tagline { font: italic 500 14px/1.4 var(--font-body); color: var(--accent-primary); margin-bottom: 4px; }
     .s14-support { font: 400 12px/1.4 var(--font-body); color: var(--text-secondary); margin-bottom: 12px; }
@@ -610,6 +684,51 @@
       <!-- SLIDE 1: TITLE -->
       <div class="slide">
         <div class="s1-centered">
+          <!-- Background Connection Mesh SVG -->
+          <svg class="s1-mesh-bg" viewBox="0 0 1400 300" preserveAspectRatio="xMidYMid meet">
+            <defs>
+              <filter id="glowYellow">
+                <feGaussianBlur stdDeviation="4" result="blur"/>
+                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+            <line x1="60" y1="180" x2="220" y2="100" class="s1-mesh-line" style="animation-delay:0s"/>
+            <line x1="220" y1="100" x2="380" y2="200" class="s1-mesh-line" style="animation-delay:0.3s"/>
+            <line x1="380" y1="200" x2="500" y2="120" class="s1-mesh-line" style="animation-delay:0.6s"/>
+            <line x1="500" y1="120" x2="660" y2="160" class="s1-mesh-line" style="animation-delay:0.9s"/>
+            <line x1="660" y1="160" x2="780" y2="80" class="s1-mesh-line" style="animation-delay:1.2s"/>
+            <line x1="780" y1="80" x2="920" y2="190" class="s1-mesh-line" style="animation-delay:1.5s"/>
+            <line x1="920" y1="190" x2="1060" y2="110" class="s1-mesh-line" style="animation-delay:1.8s"/>
+            <line x1="1060" y1="110" x2="1180" y2="200" class="s1-mesh-line" style="animation-delay:2.1s"/>
+            <line x1="1180" y1="200" x2="1340" y2="140" class="s1-mesh-line" style="animation-delay:2.4s"/>
+            <line x1="220" y1="100" x2="500" y2="120" class="s1-mesh-line" style="animation-delay:0.5s"/>
+            <line x1="380" y1="200" x2="660" y2="160" class="s1-mesh-line" style="animation-delay:0.8s"/>
+            <line x1="660" y1="160" x2="920" y2="190" class="s1-mesh-line" style="animation-delay:1.1s"/>
+            <line x1="780" y1="80" x2="1060" y2="110" class="s1-mesh-line" style="animation-delay:1.4s"/>
+            <line x1="920" y1="190" x2="1180" y2="200" class="s1-mesh-line" style="animation-delay:1.7s"/>
+            <line x1="100" y1="60" x2="350" y2="40" stroke="rgba(255,217,48,0.15)" stroke-width="1" stroke-dasharray="6 4"/>
+            <line x1="350" y1="40" x2="600" y2="70" stroke="rgba(255,217,48,0.15)" stroke-width="1" stroke-dasharray="6 4"/>
+            <line x1="600" y1="70" x2="850" y2="30" stroke="rgba(255,217,48,0.15)" stroke-width="1" stroke-dasharray="6 4"/>
+            <line x1="850" y1="30" x2="1100" y2="55" stroke="rgba(255,217,48,0.15)" stroke-width="1" stroke-dasharray="6 4"/>
+            <line x1="1100" y1="55" x2="1300" y2="40" stroke="rgba(255,217,48,0.15)" stroke-width="1" stroke-dasharray="6 4"/>
+            <circle cx="60" cy="180" r="5" fill="#1E293B" stroke="#FFD930" stroke-width="1.5" class="s1-mesh-node" filter="url(#glowYellow)"/>
+            <circle cx="220" cy="100" r="5" fill="#1E293B" stroke="#06B6D4" stroke-width="1.5" class="s1-mesh-node" style="animation-delay:0.5s"/>
+            <circle cx="380" cy="200" r="5" fill="#1E293B" stroke="#FFD930" stroke-width="1.5" class="s1-mesh-node" style="animation-delay:1s"/>
+            <circle cx="500" cy="120" r="5" fill="#1E293B" stroke="#06B6D4" stroke-width="1.5" class="s1-mesh-node" style="animation-delay:1.5s"/>
+            <circle cx="660" cy="160" r="6" fill="#1E293B" stroke="#FFD930" stroke-width="1.5" class="s1-mesh-node" style="animation-delay:2s" filter="url(#glowYellow)"/>
+            <circle cx="780" cy="80" r="5" fill="#1E293B" stroke="#06B6D4" stroke-width="1.5" class="s1-mesh-node" style="animation-delay:2.5s"/>
+            <circle cx="920" cy="190" r="5" fill="#1E293B" stroke="#FFD930" stroke-width="1.5" class="s1-mesh-node" style="animation-delay:3s"/>
+            <circle cx="1060" cy="110" r="5" fill="#1E293B" stroke="#06B6D4" stroke-width="1.5" class="s1-mesh-node" style="animation-delay:3.5s"/>
+            <circle cx="1180" cy="200" r="5" fill="#1E293B" stroke="#FFD930" stroke-width="1.5" class="s1-mesh-node" style="animation-delay:4s"/>
+            <circle cx="1340" cy="140" r="5" fill="#1E293B" stroke="#06B6D4" stroke-width="1.5" class="s1-mesh-node" style="animation-delay:4.5s"/>
+            <circle cx="100" cy="60" r="4" fill="#FFD930" opacity="0.5" class="s1-mesh-node" style="animation-delay:0.2s"/>
+            <circle cx="350" cy="40" r="4" fill="#FFD930" opacity="0.5" class="s1-mesh-node" style="animation-delay:0.7s"/>
+            <circle cx="600" cy="70" r="4" fill="#FFD930" opacity="0.5" class="s1-mesh-node" style="animation-delay:1.2s"/>
+            <circle cx="850" cy="30" r="4" fill="#FFD930" opacity="0.5" class="s1-mesh-node" style="animation-delay:1.7s"/>
+            <circle cx="1100" cy="55" r="4" fill="#FFD930" opacity="0.5" class="s1-mesh-node" style="animation-delay:2.2s"/>
+            <circle cx="1300" cy="40" r="4" fill="#FFD930" opacity="0.5" class="s1-mesh-node" style="animation-delay:2.7s"/>
+          </svg>
+
           <img class="s1-hero-logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAzUAAADhCAYAAADxq5tIAAAACXBIWXMAAC4jAAAuIwF4pT92AAAGOWlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgOS4xLWMwMDMgNzkuOTY5MGE4N2ZjLCAyMDI1LzAzLzA2LTIwOjUwOjE2ICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIgeG1sbnM6cGhvdG9zaG9wPSJodHRwOi8vbnMuYWRvYmUuY29tL3Bob3Rvc2hvcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RFdnQ9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZUV2ZW50IyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgMjcuMSAoTWFjaW50b3NoKSIgeG1wOkNyZWF0ZURhdGU9IjIwMjYtMDItMTZUMTQ6MDA6MDQtMDU6MDAiIHhtcDpNb2RpZnlEYXRlPSIyMDI2LTAyLTE2VDE0OjA2OjI0LTA1OjAwIiB4bXA6TWV0YWRhdGFEYXRlPSIyMDI2LTAyLTE2VDE0OjA2OjI0LTA1OjAwIiBkYzpmb3JtYXQ9ImltYWdlL3BuZyIgcGhvdG9zaG9wOkNvbG9yTW9kZT0iMyIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDo3ZjdlNmYyOC1mMjg2LTQyM2QtYmZjYi1mM2M1NWU3OTgwMDgiIHhtcE1NOkRvY3VtZW50SUQ9ImFkb2JlOmRvY2lkOnBob3Rvc2hvcDoyZTA0NWNjZi1kYmY1LTVkNDQtOGU2ZC04OGYzNTQxMTU5NTMiIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDozNmY5NTFiNy02YjEwLTQyNzUtOTg2ZS01NTgyNzdkZDlhMmIiPiA8eG1wTU06SGlzdG9yeT4gPHJkZjpTZXE+IDxyZGY6bGkgc3RFdnQ6YWN0aW9uPSJjcmVhdGVkIiBzdEV2dDppbnN0YW5jZUlEPSJ4bXAuaWlkOjM2Zjk1MWI3LTZiMTAtNDI3NS05ODZlLTU1ODI3N2RkOWEyYiIgc3RFdnQ6d2hlbj0iMjAyNi0wMi0xNlQxNDowMDowNC0wNTowMCIgc3RFdnQ6c29mdHdhcmVBZ2VudD0iQWRvYmUgUGhvdG9zaG9wIDI3LjEgKE1hY2ludG9zaCkiLz4gPHJkZjpsaSBzdEV2dDphY3Rpb249ImNvbnZlcnRlZCIgc3RFdnQ6cGFyYW1ldGVycz0iZnJvbSBhcHBsaWNhdGlvbi92bmQuYWRvYmUucGhvdG9zaG9wIHRvIGltYWdlL3BuZyIvPiA8cmRmOmxpIHN0RXZ0OmFjdGlvbj0ic2F2ZWQiIHN0RXZ0Omluc3RhbmNlSUQ9InhtcC5paWQ6N2Y3ZTZmMjgtZjI4Ni00MjNkLWJmY2ItZjNjNTVlNzk4MDA4IiBzdEV2dDp3aGVuPSIyMDI2LTAyLTE2VDE0OjA2OjI0LTA1OjAwIiBzdEV2dDpzb2Z0d2FyZUFnZW50PSJBZG9iZSBQaG90b3Nob3AgMjcuMSAoTWFjaW50b3NoKSIgc3RFdnQ6Y2hhbmdlZD0iLyIvPiA8L3JkZjpTZXE+IDwveG1wTU06SGlzdG9yeT4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz5P6h1NAAAj5klEQVR4nO3d+1XUyRLA8W6P/19uBGIEQgQOEYgRCBEIEagRoBGgEeBGAEYAGwEYgdwI+p7Cmt3fssO8+lXd/f2cw9F9OP5m5vfo6q6q9iEEBwAAAACtelb7AAAAAAAgBkENAAAAgKYR1AAAAABoGkENAAAAgKYR1AAAAABoGkENAAAAgKYR1AAA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" alt="Enigma">
           <div class="s1-overline">ENIGMA PROTOCOL</div>
           <h1 class="s1-title">SECURING THE <span class="gradient-text">AUTONOMOUS</span> SKY</h1>
@@ -736,30 +855,41 @@
         <h2 class="slide-title">A Moving Target That Gets Harder to Hit</h2>
         <div class="s7-split">
           <div class="s7-left">
-            <svg viewBox="0 0 240 160" preserveAspectRatio="xMidYMid meet">
-              <line x1="60" y1="10" x2="60" y2="150" stroke="#1E293B" stroke-width="1" stroke-dasharray="3 3"/>
-              <line x1="120" y1="10" x2="120" y2="150" stroke="#1E293B" stroke-width="1" stroke-dasharray="3 3"/>
-              <line x1="180" y1="10" x2="180" y2="150" stroke="#1E293B" stroke-width="1" stroke-dasharray="3 3"/>
-              <text x="30" y="10" fill="#6B7280" font-family="monospace" font-size="7" text-anchor="middle">E1</text>
-              <text x="90" y="10" fill="#6B7280" font-family="monospace" font-size="7" text-anchor="middle">E2</text>
-              <text x="150" y="10" fill="#6B7280" font-family="monospace" font-size="7" text-anchor="middle">E3</text>
-              <text x="210" y="10" fill="#6B7280" font-family="monospace" font-size="7" text-anchor="middle">E4</text>
-              <polyline points="10,40 30,70 50,35" fill="none" stroke="#FFD930" stroke-width="1.5" stroke-dasharray="4 2"/>
-              <polyline points="10,100 35,120 55,90" fill="none" stroke="#06B6D4" stroke-width="1.5" stroke-dasharray="4 2"/>
-              <polyline points="70,60 90,30 110,65" fill="none" stroke="#FFD930" stroke-width="1.5" stroke-dasharray="4 2"/>
-              <polyline points="70,110 95,85 115,120" fill="none" stroke="#06B6D4" stroke-width="1.5" stroke-dasharray="4 2"/>
-              <polyline points="130,40 150,75 170,30" fill="none" stroke="#FFD930" stroke-width="1.5" stroke-dasharray="4 2"/>
-              <polyline points="130,105 155,130 175,95" fill="none" stroke="#06B6D4" stroke-width="1.5" stroke-dasharray="4 2"/>
-              <polyline points="190,65 210,35 230,70" fill="none" stroke="#FFD930" stroke-width="1.5" stroke-dasharray="4 2"/>
-              <polyline points="190,120 215,90 235,125" fill="none" stroke="#06B6D4" stroke-width="1.5" stroke-dasharray="4 2"/>
-              <circle cx="10" cy="40" r="3" fill="#FFD930" opacity="0.7"/>
-              <circle cx="50" cy="35" r="3" fill="#FFD930" opacity="0.7"/>
-              <circle cx="110" cy="65" r="3" fill="#FFD930" opacity="0.7"/>
-              <circle cx="170" cy="30" r="3" fill="#FFD930" opacity="0.7"/>
-              <circle cx="230" cy="70" r="3" fill="#FFD930" opacity="0.7"/>
-              <text x="60" y="155" fill="#EF4444" font-family="monospace" font-size="6" text-anchor="middle">Recon expires</text>
-              <text x="120" y="155" fill="#EF4444" font-family="monospace" font-size="6" text-anchor="middle">Keys rotate</text>
-              <text x="180" y="155" fill="#EF4444" font-family="monospace" font-size="6" text-anchor="middle">Recon expires</text>
+            <svg viewBox="0 0 700 360" preserveAspectRatio="xMidYMid meet" style="max-height:180px;">
+              <defs>
+                <filter id="glowRoute">
+                  <feGaussianBlur stdDeviation="3" result="blur"/>
+                  <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+              </defs>
+              <line x1="175" y1="30" x2="175" y2="330" stroke="#1E293B" stroke-width="1" stroke-dasharray="4 4"/>
+              <line x1="350" y1="30" x2="350" y2="330" stroke="#1E293B" stroke-width="1" stroke-dasharray="4 4"/>
+              <line x1="525" y1="30" x2="525" y2="330" stroke="#1E293B" stroke-width="1" stroke-dasharray="4 4"/>
+              <text x="87" y="22" fill="#6B7280" font-family="JetBrains Mono, monospace" font-size="12" text-anchor="middle">EPOCH 1</text>
+              <text x="262" y="22" fill="#6B7280" font-family="JetBrains Mono, monospace" font-size="12" text-anchor="middle">EPOCH 2</text>
+              <text x="437" y="22" fill="#6B7280" font-family="JetBrains Mono, monospace" font-size="12" text-anchor="middle">EPOCH 3</text>
+              <text x="612" y="22" fill="#6B7280" font-family="JetBrains Mono, monospace" font-size="12" text-anchor="middle">EPOCH 4</text>
+              <polyline points="30,80 80,140 140,100" fill="none" stroke="#FFD930" stroke-width="2" filter="url(#glowRoute)" stroke-dasharray="8 4" style="animation: routePulse 3s ease-in-out infinite"/>
+              <polyline points="30,200 90,240 150,190" fill="none" stroke="#06B6D4" stroke-width="2" filter="url(#glowRoute)" stroke-dasharray="8 4" style="animation: routePulse 3s ease-in-out infinite; animation-delay: 0.5s"/>
+              <polyline points="200,120 250,70 320,130" fill="none" stroke="#FFD930" stroke-width="2" filter="url(#glowRoute)" stroke-dasharray="8 4" style="animation: routePulse 3s ease-in-out infinite; animation-delay: 1s"/>
+              <polyline points="195,230 260,180 330,250" fill="none" stroke="#06B6D4" stroke-width="2" filter="url(#glowRoute)" stroke-dasharray="8 4" style="animation: routePulse 3s ease-in-out infinite; animation-delay: 1.5s"/>
+              <polyline points="375,90 430,160 500,80" fill="none" stroke="#FFD930" stroke-width="2" filter="url(#glowRoute)" stroke-dasharray="8 4" style="animation: routePulse 3s ease-in-out infinite; animation-delay: 2s"/>
+              <polyline points="380,210 440,270 510,200" fill="none" stroke="#06B6D4" stroke-width="2" filter="url(#glowRoute)" stroke-dasharray="8 4" style="animation: routePulse 3s ease-in-out infinite; animation-delay: 2.5s"/>
+              <polyline points="550,140 610,80 670,150" fill="none" stroke="#FFD930" stroke-width="2" filter="url(#glowRoute)" stroke-dasharray="8 4" style="animation: routePulse 3s ease-in-out infinite; animation-delay: 3s"/>
+              <polyline points="555,250 615,190 675,260" fill="none" stroke="#06B6D4" stroke-width="2" filter="url(#glowRoute)" stroke-dasharray="8 4" style="animation: routePulse 3s ease-in-out infinite; animation-delay: 3.5s"/>
+              <text x="175" y="350" fill="#EF4444" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="middle" opacity="0.8">Recon expires</text>
+              <text x="350" y="350" fill="#EF4444" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="middle" opacity="0.8">Keys rotate</text>
+              <text x="525" y="350" fill="#EF4444" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="middle" opacity="0.8">Recon expires</text>
+              <circle cx="30" cy="80" r="4" fill="#FFD930" opacity="0.7"/>
+              <circle cx="140" cy="100" r="4" fill="#FFD930" opacity="0.7"/>
+              <circle cx="320" cy="130" r="4" fill="#FFD930" opacity="0.7"/>
+              <circle cx="500" cy="80" r="4" fill="#FFD930" opacity="0.7"/>
+              <circle cx="670" cy="150" r="4" fill="#FFD930" opacity="0.7"/>
+              <circle cx="30" cy="200" r="4" fill="#06B6D4" opacity="0.7"/>
+              <circle cx="150" cy="190" r="4" fill="#06B6D4" opacity="0.7"/>
+              <circle cx="330" cy="250" r="4" fill="#06B6D4" opacity="0.7"/>
+              <circle cx="510" cy="200" r="4" fill="#06B6D4" opacity="0.7"/>
+              <circle cx="675" cy="260" r="4" fill="#06B6D4" opacity="0.7"/>
             </svg>
           </div>
           <div class="s7-right">
@@ -776,10 +906,41 @@
         <div class="overline">DEVICE IDENTITY</div>
         <h2 class="slide-title">Every Drone Authenticated Before Any Access</h2>
         <div class="s8-grid">
-          <div class="s8-phase"><div class="s8-phase-num">01</div><div class="s8-phase-title">Token Acquisition</div></div>
-          <div class="s8-phase"><div class="s8-phase-num">02</div><div class="s8-phase-title">Key Generation</div></div>
-          <div class="s8-phase"><div class="s8-phase-num">03</div><div class="s8-phase-title">Certificate Issuance</div></div>
-          <div class="s8-phase"><div class="s8-phase-num">04</div><div class="s8-phase-title">Session Establishment</div></div>
+          <div class="s8-phase">
+            <svg class="s8-phase-icon" viewBox="0 0 48 48" fill="none">
+              <rect x="8" y="12" width="32" height="24" rx="4" stroke="#FFD930" stroke-width="1.5"/>
+              <circle cx="24" cy="24" r="6" stroke="#06B6D4" stroke-width="1.5" stroke-dasharray="4 2"/>
+              <line x1="24" y1="18" x2="24" y2="12" stroke="#FFD930" stroke-width="1.5"/>
+              <circle cx="24" cy="10" r="2" fill="#FFD930" opacity="0.6"/>
+            </svg>
+            <div class="s8-phase-num">01</div><div class="s8-phase-title">Token Acquisition</div>
+          </div>
+          <div class="s8-phase">
+            <svg class="s8-phase-icon" viewBox="0 0 48 48" fill="none">
+              <rect x="12" y="16" width="24" height="20" rx="3" stroke="#06B6D4" stroke-width="1.5"/>
+              <path d="M20 16V12a4 4 0 018 0v4" stroke="#FFD930" stroke-width="1.5" stroke-linecap="round"/>
+              <circle cx="24" cy="28" r="3" stroke="#10B981" stroke-width="1.5"/>
+            </svg>
+            <div class="s8-phase-num">02</div><div class="s8-phase-title">Key Generation</div>
+          </div>
+          <div class="s8-phase">
+            <svg class="s8-phase-icon" viewBox="0 0 48 48" fill="none">
+              <rect x="10" y="10" width="28" height="28" rx="4" stroke="#FFD930" stroke-width="1.5"/>
+              <path d="M18 24l4 4 8-8" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <line x1="10" y1="18" x2="38" y2="18" stroke="#1E293B" stroke-width="1"/>
+            </svg>
+            <div class="s8-phase-num">03</div><div class="s8-phase-title">Certificate Issuance</div>
+          </div>
+          <div class="s8-phase">
+            <svg class="s8-phase-icon" viewBox="0 0 48 48" fill="none">
+              <circle cx="16" cy="24" r="8" stroke="#06B6D4" stroke-width="1.5"/>
+              <circle cx="32" cy="24" r="8" stroke="#FFD930" stroke-width="1.5"/>
+              <line x1="24" y1="20" x2="24" y2="28" stroke="#10B981" stroke-width="2" stroke-dasharray="3 2">
+                <animate attributeName="stroke-dashoffset" values="0;-10" dur="1.5s" repeatCount="indefinite"/>
+              </line>
+            </svg>
+            <div class="s8-phase-num">04</div><div class="s8-phase-title">Session Establishment</div>
+          </div>
         </div>
         <div class="callout">
           <div class="callout-text">Only authenticated devices participate - every connection mutually verified</div>
@@ -790,6 +951,54 @@
       <div class="slide">
         <div class="overline">BVLOS OPERATIONS</div>
         <h2 class="slide-title">Secure BVLOS Flight</h2>
+        <div class="s9-visual">
+          <svg viewBox="0 0 680 400" preserveAspectRatio="xMidYMid meet">
+            <defs>
+              <filter id="glowBVLOS">
+                <feGaussianBlur stdDeviation="3" result="blur"/>
+                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+            <line x1="20" y1="340" x2="660" y2="340" stroke="#1E293B" stroke-width="1"/>
+            <g>
+              <rect x="105" y="240" width="10" height="100" fill="#1E293B" rx="2"/>
+              <circle cx="110" cy="235" r="12" stroke="#06B6D4" stroke-width="1.5" fill="none" opacity="0.6"/>
+              <circle cx="110" cy="235" r="24" stroke="#06B6D4" stroke-width="0.8" fill="none" opacity="0.3"/>
+              <text x="110" y="365" fill="#6B7280" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="middle">Link A</text>
+            </g>
+            <g>
+              <rect x="265" y="220" width="10" height="120" fill="#1E293B" rx="2"/>
+              <circle cx="270" cy="215" r="12" stroke="#06B6D4" stroke-width="1.5" fill="none" opacity="0.6"/>
+              <circle cx="270" cy="215" r="24" stroke="#06B6D4" stroke-width="0.8" fill="none" opacity="0.3"/>
+              <text x="270" y="365" fill="#6B7280" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="middle">Link B</text>
+            </g>
+            <g>
+              <rect x="425" y="230" width="10" height="110" fill="#1E293B" rx="2"/>
+              <circle cx="430" cy="225" r="12" stroke="#06B6D4" stroke-width="1.5" fill="none" opacity="0.6"/>
+              <circle cx="430" cy="225" r="24" stroke="#06B6D4" stroke-width="0.8" fill="none" opacity="0.3"/>
+              <text x="430" y="365" fill="#6B7280" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="middle">Link C</text>
+            </g>
+            <g>
+              <rect x="575" y="250" width="10" height="90" fill="#1E293B" rx="2"/>
+              <circle cx="580" cy="245" r="12" stroke="#06B6D4" stroke-width="1.5" fill="none" opacity="0.6"/>
+              <circle cx="580" cy="245" r="24" stroke="#06B6D4" stroke-width="0.8" fill="none" opacity="0.3"/>
+              <text x="580" y="365" fill="#6B7280" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="middle">Link D</text>
+            </g>
+            <path d="M40,120 C120,80 180,100 270,90 C360,80 400,110 430,95 C480,75 540,100 640,85" fill="none" stroke="#FFD930" stroke-width="2.5" filter="url(#glowBVLOS)" stroke-dasharray="10 5">
+              <animate attributeName="stroke-dashoffset" values="0;-30" dur="2s" repeatCount="indefinite"/>
+            </path>
+            <g>
+              <polygon points="40,116 50,120 40,124 42,120" fill="#FFD930" opacity="0.9">
+                <animateMotion dur="8s" repeatCount="indefinite" path="M0,0 C80,-40 140,-20 230,-30 C320,-40 360,-10 390,-25 C440,-45 500,-20 600,-35"/>
+              </polygon>
+            </g>
+            <rect x="180" y="60" width="50" height="20" rx="4" fill="rgba(16,185,129,0.15)" stroke="#10B981" stroke-width="0.8"/>
+            <text x="205" y="74" fill="#10B981" font-family="JetBrains Mono, monospace" font-size="8" text-anchor="middle">HANDOFF</text>
+            <rect x="370" y="55" width="50" height="20" rx="4" fill="rgba(16,185,129,0.15)" stroke="#10B981" stroke-width="0.8"/>
+            <text x="395" y="69" fill="#10B981" font-family="JetBrains Mono, monospace" font-size="8" text-anchor="middle">HANDOFF</text>
+            <text x="340" y="140" fill="#FFD930" font-family="JetBrains Mono, monospace" font-size="11" text-anchor="middle" opacity="0.8">ENCRYPTED OVERLAY PERSISTS</text>
+          </svg>
+        </div>
         <div class="s9-benefits">
           <div class="s9-benefit"><div class="s9-benefit-text">Encrypted overlay persists across available communications channels</div></div>
           <div class="s9-benefit"><div class="s9-benefit-text">Transport agnostic failover between any available channels</div></div>
@@ -802,22 +1011,59 @@
         <div class="overline">SWARM COORDINATION</div>
         <h2 class="slide-title">Secure Swarm at Scale</h2>
         <div class="s10-svg-wrap">
-          <svg viewBox="0 0 200 120" width="200" height="120">
-            <line x1="50" y1="30" x2="150" y2="30" stroke="#FFD930" stroke-width="1" opacity="0.4"/>
-            <line x1="50" y1="30" x2="50" y2="90" stroke="#06B6D4" stroke-width="1" opacity="0.4"/>
-            <line x1="150" y1="30" x2="150" y2="90" stroke="#06B6D4" stroke-width="1" opacity="0.4"/>
-            <line x1="50" y1="90" x2="150" y2="90" stroke="#FFD930" stroke-width="1" opacity="0.4"/>
-            <line x1="50" y1="30" x2="150" y2="90" stroke="#1E293B" stroke-width="1" stroke-dasharray="3 3"/>
-            <line x1="150" y1="30" x2="50" y2="90" stroke="#1E293B" stroke-width="1" stroke-dasharray="3 3"/>
-            <circle cx="50" cy="30" r="10" fill="#111827" stroke="#FFD930" stroke-width="1.5"/>
-            <text x="50" y="34" fill="#FFD930" font-family="monospace" font-size="8" text-anchor="middle">D1</text>
-            <circle cx="150" cy="30" r="10" fill="#111827" stroke="#FFD930" stroke-width="1.5"/>
-            <text x="150" y="34" fill="#FFD930" font-family="monospace" font-size="8" text-anchor="middle">D2</text>
-            <circle cx="50" cy="90" r="10" fill="#111827" stroke="#06B6D4" stroke-width="1.5"/>
-            <text x="50" y="94" fill="#06B6D4" font-family="monospace" font-size="8" text-anchor="middle">D3</text>
-            <circle cx="150" cy="90" r="10" fill="#111827" stroke="#06B6D4" stroke-width="1.5"/>
-            <text x="150" y="94" fill="#06B6D4" font-family="monospace" font-size="8" text-anchor="middle">D4</text>
-            <text x="100" y="115" fill="#6B7280" font-family="monospace" font-size="7" text-anchor="middle">ALL CONNECTIONS AUTHENTICATED</text>
+          <svg viewBox="0 0 800 320" preserveAspectRatio="xMidYMid meet">
+            <defs>
+              <filter id="glowSwarm">
+                <feGaussianBlur stdDeviation="3" result="blur"/>
+                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+            <line x1="200" y1="80" x2="400" y2="60" class="s10-mesh-line"/>
+            <line x1="400" y1="60" x2="600" y2="80" class="s10-mesh-line"/>
+            <line x1="200" y1="80" x2="300" y2="180" class="s10-mesh-line-alt"/>
+            <line x1="400" y1="60" x2="300" y2="180" class="s10-mesh-line"/>
+            <line x1="400" y1="60" x2="500" y2="180" class="s10-mesh-line"/>
+            <line x1="600" y1="80" x2="500" y2="180" class="s10-mesh-line-alt"/>
+            <line x1="300" y1="180" x2="500" y2="180" class="s10-mesh-line"/>
+            <line x1="300" y1="180" x2="400" y2="260" class="s10-mesh-line-alt"/>
+            <line x1="500" y1="180" x2="400" y2="260" class="s10-mesh-line-alt"/>
+            <line x1="200" y1="80" x2="100" y2="180" class="s10-mesh-line"/>
+            <line x1="100" y1="180" x2="300" y2="180" class="s10-mesh-line-alt"/>
+            <line x1="600" y1="80" x2="700" y2="180" class="s10-mesh-line"/>
+            <line x1="700" y1="180" x2="500" y2="180" class="s10-mesh-line-alt"/>
+            <g>
+              <circle cx="200" cy="80" r="18" fill="#111827" stroke="#FFD930" stroke-width="1.5" filter="url(#glowSwarm)"/>
+              <text x="200" y="84" fill="#FFD930" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="middle">D1</text>
+            </g>
+            <g>
+              <circle cx="400" cy="60" r="18" fill="#111827" stroke="#FFD930" stroke-width="1.5" filter="url(#glowSwarm)"/>
+              <text x="400" y="64" fill="#FFD930" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="middle">D2</text>
+            </g>
+            <g>
+              <circle cx="600" cy="80" r="18" fill="#111827" stroke="#FFD930" stroke-width="1.5" filter="url(#glowSwarm)"/>
+              <text x="600" y="84" fill="#FFD930" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="middle">D3</text>
+            </g>
+            <g>
+              <circle cx="100" cy="180" r="18" fill="#111827" stroke="#06B6D4" stroke-width="1.5"/>
+              <text x="100" y="184" fill="#06B6D4" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="middle">D4</text>
+            </g>
+            <g>
+              <circle cx="300" cy="180" r="18" fill="#111827" stroke="#06B6D4" stroke-width="1.5"/>
+              <text x="300" y="184" fill="#06B6D4" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="middle">D5</text>
+            </g>
+            <g>
+              <circle cx="500" cy="180" r="18" fill="#111827" stroke="#06B6D4" stroke-width="1.5"/>
+              <text x="500" y="184" fill="#06B6D4" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="middle">D6</text>
+            </g>
+            <g>
+              <circle cx="700" cy="180" r="18" fill="#111827" stroke="#06B6D4" stroke-width="1.5"/>
+              <text x="700" y="184" fill="#06B6D4" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="middle">D7</text>
+            </g>
+            <g>
+              <circle cx="400" cy="260" r="18" fill="#111827" stroke="#10B981" stroke-width="1.5"/>
+              <text x="400" y="264" fill="#10B981" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="middle">D8</text>
+            </g>
+            <text x="400" y="310" fill="#6B7280" font-family="JetBrains Mono, monospace" font-size="11" text-anchor="middle">ALL CONNECTIONS MUTUALLY AUTHENTICATED</text>
           </svg>
         </div>
         <div class="s10-attrs">
@@ -856,12 +1102,12 @@
         <div class="overline">COMPLIANCE</div>
         <h2 class="slide-title">Built for the Standards That Matter</h2>
         <div class="s12-grid">
-          <div class="s12-item"><div class="s12-dot"></div><div class="s12-item-title">NIST 800-207</div></div>
-          <div class="s12-item"><div class="s12-dot"></div><div class="s12-item-title">FIPS 140-2 Level 3</div></div>
-          <div class="s12-item"><div class="s12-dot"></div><div class="s12-item-title">GDPR / Data Residency</div></div>
-          <div class="s12-item"><div class="s12-dot"></div><div class="s12-item-title">Designed for Allied Interop</div></div>
-          <div class="s12-item"><div class="s12-dot"></div><div class="s12-item-title">Post-Quantum Ready</div></div>
-          <div class="s12-item"><div class="s12-dot"></div><div class="s12-item-title">Remote ID Integration Path</div></div>
+          <div class="s12-item"><div class="s12-check"><svg viewBox="0 0 14 14"><polyline points="3 7 6 10 11 4"/></svg></div><div class="s12-item-title">NIST 800-207</div></div>
+          <div class="s12-item"><div class="s12-check"><svg viewBox="0 0 14 14"><polyline points="3 7 6 10 11 4"/></svg></div><div class="s12-item-title">FIPS 140-2 Level 3</div></div>
+          <div class="s12-item"><div class="s12-check"><svg viewBox="0 0 14 14"><polyline points="3 7 6 10 11 4"/></svg></div><div class="s12-item-title">GDPR / Data Residency</div></div>
+          <div class="s12-item"><div class="s12-check"><svg viewBox="0 0 14 14"><polyline points="3 7 6 10 11 4"/></svg></div><div class="s12-item-title">Designed for Allied Interop</div></div>
+          <div class="s12-item"><div class="s12-check"><svg viewBox="0 0 14 14"><polyline points="3 7 6 10 11 4"/></svg></div><div class="s12-item-title">Post-Quantum Ready</div></div>
+          <div class="s12-item"><div class="s12-check"><svg viewBox="0 0 14 14"><polyline points="3 7 6 10 11 4"/></svg></div><div class="s12-item-title">Remote ID Integration Path</div></div>
         </div>
         <div class="callout">
           <div class="callout-text" style="font-size:10px;">Sovereignty by design - deployable within national boundaries, operated under national authority</div>
