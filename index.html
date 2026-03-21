@@ -526,6 +526,7 @@
       showLoading(false);
       deckIframe.srcdoc = html;
       deckViewer.classList.add('active');
+      deckIframe.onload = function () { deckIframe.focus(); };
     })
     .catch(function (err) {
       showLoading(false);
