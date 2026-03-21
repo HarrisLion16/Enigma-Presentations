@@ -1,0 +1,492 @@
+ENIGMA DRONE SECURITY - MOBILE DECK DESIGN SPECIFICATION
+=========================================================
+Visual Design Advisor Output
+Target: Standalone HTML file for phone landscape viewing
+File: drone-security-mobile.html
+
+=========================================================
+GLOBAL SPECIFICATIONS
+=========================================================
+
+TARGET VIEWPORTS:
+- iPhone landscape: ~844x390
+- Android landscape: ~915x412
+- Usable content area after padding: ~812x342 (iPhone) / ~883x364 (Android)
+- Design to the smaller viewport (844x390) as the constraint
+
+PORTRAIT BEHAVIOR:
+- Show full-screen "Rotate your device" overlay
+- Same treatment as the existing desktop deck
+- Trigger: orientation === 'portrait' on screens <= 1024px wide
+
+SLIDE CONTAINER:
+- Each slide: width 100vw, height 100vh (use 100dvh for iOS safe area)
+- overflow: hidden on each slide (no scroll within a slide)
+- background: #0A0E17 per slide
+
+SWIPE TRACK:
+- Outer wrapper: overflow hidden, width 100vw, height 100dvh
+- Inner track: display flex, flex-direction row
+- Each slide is flex: 0 0 100%, width 100%
+- Position slides via transform: translateX(-N * 100%) on the track
+- Transition: transform 300ms ease-out
+- Touch swipe detection:
+  - Track touchstart X, touchmove X, touchend X
+  - Threshold: 50px minimum swipe distance
+  - Swipe left (negative deltaX) = next slide
+  - Swipe right (positive deltaX) = previous slide
+  - During swipe, move track by finger delta (rubber-band feel)
+  - On release, snap to nearest slide
+
+EDGE PEEK (optional, subtle):
+- No edge peek. The dot indicators are sufficient for discoverability.
+- If implemented later, show 8px of next slide's left edge with a dim gradient overlay.
+
+SLIDE INDICATOR DOTS:
+- Position: fixed, bottom 8px, left 50%, transform translateX(-50%)
+- Container: display flex, gap 4px, z-index 100
+- Each dot: width 6px, height 6px, border-radius 50%
+- Active dot: background #FFD930 (gold)
+- Inactive dots: background rgba(255,255,255,0.15)
+- Transition: background 300ms ease
+- No tap interaction on dots (too small to be useful)
+
+LOGO:
+- Enigma logo PNG, position absolute, top 8px, left 12px
+- Height: 16px, width auto
+- Opacity: 0.7
+- z-index: 10
+
+NO PAGE NUMBERS. NO COPYRIGHT TEXT.
+
+TYPOGRAPHY SCALE (global defaults):
+- Overline: 10px, JetBrains Mono or Inter, font-weight 600, uppercase, letter-spacing 2px, color #FFD930
+- Slide title: 20px, Inter, font-weight 700, color #FFFFFF, line-height 1.2
+- Subtitle/body: 13px, Inter, font-weight 400, color #9CA3AF, line-height 1.4
+- Card title: 13px, Inter, font-weight 600, color #FFFFFF
+- Card body: 12px, Inter, font-weight 400, color #9CA3AF, line-height 1.35
+- Card label (mono): 9px, JetBrains Mono, font-weight 600, uppercase, letter-spacing 1.5px
+- Stat value (large number): 28px, Inter, font-weight 800, gradient text
+- Minimum text size anywhere: 10px
+
+PADDING (every slide):
+- padding: 28px 16px 20px 16px
+- Top 28px accounts for logo clearance
+- Bottom 20px clears dot indicators
+
+CARD STYLE:
+- background: #111827
+- border: 1px solid #1E293B
+- border-radius: 8px
+- padding: 8px 10px (tight)
+
+COLORS (same as desktop):
+- bg-primary: #0A0E17
+- bg-card: #111827
+- text-heading: #FFFFFF
+- text-primary: #E5E7EB
+- text-secondary: #9CA3AF
+- text-muted: #6B7280
+- accent-primary: #FFD930 (gold)
+- accent-secondary: #06B6D4 (cyan)
+- status-danger: #EF4444
+- status-success: #10B981
+
+ANIMATIONS:
+- Disable all desktop animations (fadeInUp, fadeInLeft, etc.)
+- Only animation: swipe transition on the track
+
+GOLD DIVIDER (when used):
+- width: 40px, height: 2px, gradient from #FFD930 to #06B6D4
+
+
+=========================================================
+PER-SLIDE SPECIFICATIONS
+=========================================================
+
+---------------------------------------------------------
+SLIDE 1 - TITLE
+"Securing the Autonomous Sky"
+---------------------------------------------------------
+LAYOUT: Centered vertically and horizontally, single column
+CONTENT TO KEEP:
+  - Enigma logo (hero size): 48px height, centered
+  - Overline: "ENIGMA PROTOCOL" - 10px
+  - Title: "SECURING THE AUTONOMOUS SKY" - 24px, bold, gradient text on "AUTONOMOUS"
+  - Gold divider: 40px wide, centered
+  - Subtitle: "Privacy infrastructure for the next generation of autonomous systems" - 12px
+  - Badges row: "ZERO-TRUST", "TRANSPORT AGNOSTIC", "SOVEREIGN" - 9px each
+CONTENT TO CUT:
+  - Background mesh SVG - REMOVE entirely (too complex, wastes rendering)
+CUT the subtitle to one line if needed.
+SPACING:
+  - Logo margin-bottom: 12px
+  - Overline margin-bottom: 8px
+  - Title margin-bottom: 8px
+  - Divider margin-bottom: 8px
+  - Subtitle margin-bottom: 12px
+BADGES:
+  - display flex, gap 6px, flex-wrap wrap, justify-content center
+  - Each: 9px mono, padding 4px 8px, border 1px solid rgba(6,182,212,0.2), border-radius 6px
+
+---------------------------------------------------------
+SLIDE 2 - THE PROBLEM
+"Drones Are Flying Blind"
+---------------------------------------------------------
+LAYOUT: Two-column (left 60%, right 40%)
+  - Left: 3 vulnerability cards stacked (cut from 4)
+  - Right: Market callout stat
+CONTENT TO KEEP:
+  - Overline + Title
+  - 3 vulnerability cards (cut the 4th "Single-Transport Fragility"):
+    1. GPS Spoofing - title + 1-line desc only, cut the stat line
+    2. Unencrypted C2 - title + 1-line desc
+    3. Man-in-the-Middle - title + 1-line desc
+  - Market callout: "$55B+" and "Global drone market by 2030"
+CONTENT TO CUT:
+  - 4th vulnerability card ("Single-Transport Fragility")
+  - Stat lines within vuln cards
+  - Description text beyond 1 short line per card
+FONT SIZES:
+  - Overline: 10px
+  - Title: 18px (shorter title, fits one line)
+  - Vuln label: 9px, red (#EF4444)
+  - Vuln title: 12px, bold
+  - Vuln desc: 11px
+  - Market value: 32px, gradient
+  - Market label: 11px
+CARD STYLE:
+  - Vuln cards: border-left 2px solid #EF4444, padding 6px 8px, gap between cards 6px
+  - Market callout: border 1px solid rgba(255,217,48,0.2), border-radius 10px, centered text
+SPACING:
+  - Column gap: 10px
+
+---------------------------------------------------------
+SLIDE 3 - REGULATORY MOMENT
+"Governments Are Acting Now"
+---------------------------------------------------------
+LAYOUT: Single column, 2x2 grid of regulation cards (cut from 3x2)
+CONTENT TO KEEP:
+  - Overline + Title (cut subtitle entirely)
+  - 4 regulation cards (cut from 6):
+    1. United States
+    2. EU / EASA
+    3. NATO
+    4. Five Eyes / AUKUS
+  - Bottom callout
+CONTENT TO CUT:
+  - Subtitle line
+  - India card
+  - ICAO card
+  - Shorten remaining card text to ~1 line each
+FONT SIZES:
+  - Overline: 10px
+  - Title: 18px
+  - Card label: 9px, cyan
+  - Card text: 11px
+  - Callout text: 11px, gold
+LAYOUT:
+  - Grid: 2 columns, gap 6px
+  - Card padding: 6px 8px
+  - Callout: full width below grid, padding 6px 10px
+
+---------------------------------------------------------
+SLIDE 4 - THE GAP
+"No Current Solution Covers the Full Stack"
+---------------------------------------------------------
+LAYOUT: Single column, simplified table + punchline
+CONTENT TO KEEP:
+  - Overline + Title
+  - Table with 4 rows (keep all): Encrypted C2, Multi-transport, Swarm auth, Regulatory compliance
+  - Punchline callout
+CONTENT TO CUT:
+  - Table descriptions can be shortened
+FONT SIZES:
+  - Overline: 10px
+  - Title: 17px (long title - may need to wrap to 2 lines at this size)
+  - Table header: 9px mono, gold
+  - Table cells: 11px
+  - Gap cells: 11px, red
+  - Punchline: 11px
+TABLE STYLE:
+  - table-layout: fixed
+  - 3 columns: 35% / 35% / 30%
+  - Cell padding: 6px 8px
+  - Border-radius: 8px on table container
+  - Max table height: ~180px
+
+---------------------------------------------------------
+SLIDE 5 - INTRODUCING RAVID
+"The Missing Infrastructure Layer"
+---------------------------------------------------------
+LAYOUT: Single column - stacked layer diagram + 2x2 attribute cards
+CONTENT TO KEEP:
+  - Overline + Title
+  - 3-layer diagram (Drone Ops / RAVID / Transport) - simplified to narrow bars
+  - 4 attribute cards in 2x2 grid
+CONTENT TO CUT:
+  - Layer text descriptions (keep labels only)
+  - Attribute descriptions (keep titles only, or 1 very short line)
+FONT SIZES:
+  - Layer label: 9px mono
+  - Layer text: cut or 10px
+  - Attr title: 12px bold
+  - Attr desc: 10px (1 line max)
+LAYER DIAGRAM:
+  - Each layer: full width, height 28px, centered text
+  - Top: cyan border/bg tint
+  - Middle: gold border/bg tint, slightly taller (32px)
+  - Bottom: subtle border
+  - No rounded corners between layers (stack flush)
+ATTR GRID:
+  - 2x2, gap 6px
+  - Card padding: 6px 8px
+
+---------------------------------------------------------
+SLIDE 6 - FOUR LAYERS (AMTD)
+"Four Layers of Automated Moving Target Defense"
+---------------------------------------------------------
+LAYOUT: Single column - 4 layer bars stacked, no callout sidebar
+CONTENT TO KEEP:
+  - Overline + Title (shorten to "Four Layers of AMTD")
+  - 4 layer bars: Network, Compute, Storage, Coordination
+  - Each bar: number + name + 1-line description
+CONTENT TO CUT:
+  - Right-side callout panel (move key line to bottom if space)
+  - Trim descriptions to shortest meaningful version
+FONT SIZES:
+  - Overline: 10px
+  - Title: 18px
+  - Layer number: 18px, gradient
+  - Layer name: 13px bold
+  - Layer desc: 11px
+LAYER BAR:
+  - display flex, align-items center, gap 8px
+  - Number: min-width 24px
+  - Card padding: 8px 10px
+  - Gap between bars: 6px
+
+---------------------------------------------------------
+SLIDE 7 - EPOCH SECURITY
+"A Moving Target That Gets Harder to Hit"
+---------------------------------------------------------
+LAYOUT: Two-column (left 50% SVG, right 50% text)
+CONTENT TO KEEP:
+  - Overline + Title
+  - SVG timeline (simplified - keep but scale to fit ~180px height)
+  - 3 point cards on the right
+  - Bottom stat callout (full width below columns)
+CONTENT TO CUT:
+  - Simplify SVG: keep the core epoch lines and nodes, remove fine detail
+  - Trim point text to 1 line each
+FONT SIZES:
+  - Overline: 10px
+  - Title: 18px
+  - Point number: 10px mono, gold
+  - Point text: 11px
+  - Bottom stat: 11px, gold
+SVG:
+  - Keep the SVG but constrain to max-height 160px
+  - Scale with preserveAspectRatio="xMidYMid meet"
+LAYOUT:
+  - Column gap: 10px
+  - Point cards: padding 6px 8px, gap 5px
+
+---------------------------------------------------------
+SLIDE 8 - IDENTITY-FIRST SECURITY
+"Every Drone Authenticated Before Any Access"
+---------------------------------------------------------
+LAYOUT: 2x2 grid of 4 phases + 1 callout below
+CONTENT TO KEEP:
+  - Overline + Title
+  - 4 phases in 2x2 grid: Token Acquisition, Key Generation, + 2 more
+  - Keep phase number + title only per card
+  - 1 callout (merge the 2 desktop callouts into 1)
+CONTENT TO CUT:
+  - Phase SVG icons - REMOVE (too small to be meaningful at this size)
+  - Phase descriptions - CUT entirely, title is enough
+  - 2nd callout - merge into 1 line
+  - Arrow connectors between phases
+FONT SIZES:
+  - Phase number: 16px, gradient
+  - Phase title: 12px bold
+  - Callout: 11px
+GRID:
+  - 2x2, gap 6px
+  - Card padding: 8px 10px
+
+---------------------------------------------------------
+SLIDE 9 - BVLOS OPERATIONS
+"Secure Long-Range Flight Without Compromise"
+---------------------------------------------------------
+LAYOUT: Two-column (left SVG, right benefits) or single column
+CONTENT TO KEEP:
+  - Overline + Title (shorten to "Secure BVLOS Flight")
+  - 3 benefits (cut from 5):
+    1. Encrypted overlay persists across channels
+    2. Transport agnostic failover
+    3. Continuous authentication prevents hijacking
+CONTENT TO CUT:
+  - SVG route map - REMOVE (too detailed for mobile)
+  - Benefits 3 and 5 (Low-latency, Meets requirements)
+  - Shorten benefit text to ~1 line each
+FONT SIZES:
+  - Benefit number: 10px mono, cyan
+  - Benefit text: 12px
+LAYOUT:
+  - Since SVG is cut: single column, benefits stacked
+  - Benefits take full width
+  - Card padding: 8px 10px, gap 6px
+  - Cards get left border 2px solid #06B6D4
+
+---------------------------------------------------------
+SLIDE 10 - SWARM COORDINATION
+"Secure Swarm Intelligence at Scale"
+---------------------------------------------------------
+LAYOUT: Simplified SVG (top) + 2x2 attribute grid (bottom)
+CONTENT TO KEEP:
+  - Overline + Title (shorten to "Secure Swarm at Scale")
+  - SVG mesh visual - simplified, max-height 120px
+  - 4 attribute cards in 2x2
+CONTENT TO CUT:
+  - Reduce SVG complexity (fewer nodes/lines)
+  - Keep attr text to title-length only (~1 line)
+FONT SIZES:
+  - Attr number: 10px mono, gold
+  - Attr text: 11px
+SVG:
+  - Keep but constrain to 120px height
+  - If the SVG is too heavy, replace with a simple 4-node mesh icon
+GRID:
+  - 2x2, gap 6px
+  - Card padding: 6px 8px
+
+---------------------------------------------------------
+SLIDE 11 - CRITICAL INFRASTRUCTURE
+"Where It Matters, Why It's Urgent"
+---------------------------------------------------------
+LAYOUT: 3 threat stats in a row (top) + 2 column cards below (cut from 3)
+CONTENT TO KEEP:
+  - Overline + Title (shorten to "Where It Matters")
+  - 3 threat stat cards in a row: "Hundreds", "1,500/day", "EW Collapse"
+  - 2 column cards (cut 1):
+    1. Mission Applications
+    2. Sovereign Fleet Programs
+CONTENT TO CUT:
+  - 3rd column card ("Allied Interoperability") - less critical
+  - Shorten column card body text to 2-3 lines max
+  - Cut the bulleted list items within column cards
+FONT SIZES:
+  - Threat stat: 18px bold, red
+  - Threat label: 9px
+  - Col label: 9px mono
+  - Col title: 13px bold
+  - Col text: 11px
+LAYOUT:
+  - Threat stats: 3 columns, gap 6px
+  - Stat card padding: 6px 8px
+  - Column cards: 2 columns below, gap 8px
+  - Col card padding: 8px 10px
+
+---------------------------------------------------------
+SLIDE 12 - COMPLIANCE
+"Built for the Standards That Matter"
+---------------------------------------------------------
+LAYOUT: 2x3 grid of compliance cards (keep all 6) + callout
+CONTENT TO KEEP:
+  - Overline + Title
+  - 6 compliance cards in 3x2 grid:
+    NIST 800-207, FIPS 140-2, GDPR, Allied Interop, Post-Quantum, Remote ID
+  - Bottom callout
+CONTENT TO CUT:
+  - Card descriptions - CUT entirely, title + check icon is enough
+  - Simplify check icon: just a small green circle, no SVG
+FONT SIZES:
+  - Card title: 11px bold
+  - Callout: 10px, gold
+LAYOUT:
+  - Grid: 3 columns, 2 rows, gap 5px
+  - Card: display flex, align-items center, gap 6px
+  - Green dot: 8px circle, background #10B981
+  - Card padding: 6px 8px
+  - Callout: full width, padding 6px 10px
+
+---------------------------------------------------------
+SLIDE 13 - MARKET OPPORTUNITY
+"The Numbers That Matter"
+---------------------------------------------------------
+LAYOUT: 2x2 stat cards (top) + horizontal bar chart (bottom)
+CONTENT TO KEEP:
+  - Overline + Title
+  - 4 stat cards in 2x2: $55B+, $17.7B, 19%, $36B
+  - 4 vertical bars (cut from 6): Defense, Delivery, Energy, Agriculture
+CONTENT TO CUT:
+  - 2 bar chart entries (Public Safety, Construction)
+  - Stat label text shortened to key phrase
+  - Note/footnote text
+FONT SIZES:
+  - Stat value: 24px, gradient
+  - Stat label: 10px
+  - Bar label: 10px
+  - Bar track height: 10px
+LAYOUT:
+  - Stat grid: 2x2, gap 6px
+  - Stat card: padding 8px 6px, text-align center
+  - Bar section below stats
+  - Bar label width: 70px, text-align right
+  - Bar gap: 4px
+
+---------------------------------------------------------
+SLIDE 14 - CLOSING / CTA
+"Stealth Infrastructure. Sovereign Security."
+---------------------------------------------------------
+LAYOUT: Centered vertically and horizontally
+CONTENT TO KEEP:
+  - Enigma hero logo: 40px height, centered
+  - Title: "Stealth Infrastructure. Sovereign Security." - 20px
+  - Tagline: "They can't attack what they can't find." - 14px italic, gold
+  - Support line: "Sovereign. Interoperable. Purpose-Built." - 12px
+  - Gold divider: 60px
+CONTENT TO CUT:
+  - Background hex mesh SVG - REMOVE
+  - 3 CTA cards - REMOVE entirely (too much content for mobile closing)
+  - Contact line - cut (can be on a follow-up)
+CUT is aggressive here. The closing slide should be a clean brand stamp.
+SPACING:
+  - Logo margin-bottom: 12px
+  - Title margin-bottom: 6px
+  - Tagline margin-bottom: 4px
+  - Support margin-bottom: 12px
+  - Divider centered
+
+
+=========================================================
+IMPLEMENTATION NOTES FOR FRONT-END DEVELOPER
+=========================================================
+
+1. FILE STRUCTURE: Single standalone HTML file. All CSS inline in <style>.
+   All JS inline in <script>. No external dependencies except Google Fonts (Inter).
+   The Enigma logo can be embedded as base64 (same as desktop deck) or referenced
+   as enigma-logo.png from the same directory.
+
+2. SWIPE ENGINE: Use vanilla JS touch events. No library needed.
+   - touchstart: record startX, startTime
+   - touchmove: calculate deltaX, apply transform to track (follow finger)
+   - touchend: if |deltaX| > 50px and elapsed < 300ms, navigate. Otherwise snap back.
+   - Prevent vertical scroll during horizontal swipe.
+
+3. VIEWPORT META: <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+   This prevents zoom (we want fixed layout).
+
+4. CSS CUSTOM PROPERTIES: Reuse the same variable names as the desktop deck for
+   consistency. Override values as needed.
+
+5. TESTING PRIORITY: iPhone Safari (most restrictive), Chrome Android, Firefox Android.
+   Test with DevTools mobile emulation first, real devices second.
+
+6. PERFORMANCE: No base64 logos repeated 14 times. Define once, reference via CSS or
+   a single DOM element positioned fixed. This cuts file size dramatically.
+
+7. The file should be named: drone-security-mobile.html
+
+END OF SPECIFICATION
