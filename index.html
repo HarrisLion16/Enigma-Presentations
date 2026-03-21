@@ -496,6 +496,12 @@
 
   // ---- Load a deck ----
   function loadDeck(deck) {
+    // On mobile, open deck directly on GitHub Pages (iframe scrolling broken on iOS)
+    if (window.innerWidth <= 1024) {
+      window.location.href = 'https://harrislion16.github.io/Enigma-Presentations/' + deck.path;
+      return;
+    }
+
     showLoading(true);
 
     var url = 'https://raw.githubusercontent.com/HarrisLion16/Enigma-Presentations/main/' + deck.path;
