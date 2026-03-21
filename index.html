@@ -57,11 +57,11 @@
   }
 
   .logo {
-    height: 80px;
-    width: auto;
-    max-width: 100%;
-    object-fit: contain;
     display: block;
+    max-height: 80px;
+    max-width: 100%;
+    width: auto;
+    height: auto;
     margin: 0 auto 16px;
     filter: drop-shadow(0 0 30px rgba(255,217,48,0.1));
   }
@@ -140,7 +140,7 @@
   }
 
   .deck-header .logo {
-    height: 80px;
+    max-height: 80px;
     margin-bottom: 16px;
   }
 
@@ -299,7 +299,7 @@
   /* ---- Responsive ---- */
   @media (max-width: 480px) {
     .token-card { padding: 36px 24px; }
-    .logo { height: 56px; }
+    .logo { max-height: 56px; }
     .deck-header { padding-top: 32px; margin-bottom: 32px; }
     .deck-card-icon { width: 60px; height: 60px; }
   }
