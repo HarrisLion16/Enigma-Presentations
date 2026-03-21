@@ -412,9 +412,7 @@
 
     var url = 'https://raw.githubusercontent.com/HarrisLion16/Enigma-Presentations/main/' + deck.path;
 
-    fetch(url, {
-      headers: { 'Authorization': 'token ' + currentToken }
-    })
+    fetch(url)
     .then(function (res) {
       if (res.status === 401 || res.status === 403) {
         showLoading(false);
