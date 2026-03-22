@@ -117,11 +117,15 @@
       flex: 0 0 100%;
       width: 100vw;
       height: 100dvh;
-      overflow: hidden;
+      overflow-y: auto;
+      overflow-x: hidden;
       background: var(--bg-primary);
       padding: 28px 16px 20px 16px;
       position: relative;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
     }
+    .slide::-webkit-scrollbar { display: none; }
 
     /* Typography */
     .overline {
@@ -347,7 +351,7 @@
     /* ===== SLIDE 3 - REGULATORY ===== */
     .s3-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr;
       gap: 6px;
       margin-bottom: 6px;
     }
@@ -577,7 +581,7 @@
     .s11-threat-label { font: 400 9px/1.3 var(--font-body); color: var(--text-secondary); }
     .s11-cols {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr;
       gap: 8px;
     }
     .s11-col {
@@ -771,6 +775,11 @@
               <div class="s2-vuln-title">Intercepted Communications</div>
               <div class="s2-vuln-desc">Communications intercepted and modified in real-time</div>
             </div>
+            <div class="s2-vuln">
+              <div class="s2-vuln-label">Single-Transport Fragility</div>
+              <div class="s2-vuln-title">No Resilient Failover</div>
+              <div class="s2-vuln-desc">Lose the link, lose the drone - no resilient failover between transport layers</div>
+            </div>
           </div>
           <div class="s2-right">
             <div class="s2-market">
@@ -799,8 +808,16 @@
             <div class="s3-text">Architecture designed for allied interoperability across 14+ nations</div>
           </div>
           <div class="s3-card">
+            <div class="s3-label">India</div>
+            <div class="s3-text">Import ban on finished drones (2022) - domestic manufacturing mandated</div>
+          </div>
+          <div class="s3-card">
             <div class="s3-label">Five Eyes / AUKUS</div>
             <div class="s3-text">ITAR reforms enable allied drone technology sharing</div>
+          </div>
+          <div class="s3-card">
+            <div class="s3-label">ICAO</div>
+            <div class="s3-text">Global Aviation Security Plan with cybersecurity requirements for member states</div>
           </div>
         </div>
         <div class="callout">
@@ -820,6 +837,7 @@
               <tr><td>Multi-transport</td><td>Multilink bonding</td><td class="gap-cell">No zero-trust identity</td></tr>
               <tr><td>Swarm auth</td><td>Proprietary per-vendor</td><td class="gap-cell">No cross-fleet standard</td></tr>
               <tr><td>BVLOS connectivity</td><td>Available transports</td><td class="gap-cell">No overlay security</td></tr>
+              <tr><td>Metadata protection</td><td>None</td><td class="gap-cell">Not addressed</td></tr>
             </tbody>
           </table>
         </div>
@@ -854,6 +872,9 @@
           <div class="s6-bar"><div class="s6-num">02</div><div><div class="s6-name">Compute</div><div class="s6-desc">Workload placement for edge compute on ground stations</div></div></div>
           <div class="s6-bar"><div class="s6-num">03</div><div><div class="s6-name">Storage</div><div class="s6-desc">Fragmented mission data via secret sharing</div></div></div>
           <div class="s6-bar"><div class="s6-num">04</div><div><div class="s6-name">Coordination</div><div class="s6-desc">Epoch synchronization - all nodes move without a coordinator</div></div></div>
+        </div>
+        <div class="callout" style="margin-top:6px;">
+          <div class="callout-text">After each epoch, previous reconnaissance is stale. Attack difficulty compounds with each cycle.</div>
         </div>
       </div>
 
@@ -950,8 +971,11 @@
             <div class="s8-phase-num">04</div><div class="s8-phase-title">Session Establishment</div>
           </div>
         </div>
+        <div class="callout" style="margin-bottom:4px;">
+          <div class="callout-text">Rogue drones cannot join the network - only authenticated devices participate</div>
+        </div>
         <div class="callout">
-          <div class="callout-text">Only authenticated devices participate - every connection mutually verified</div>
+          <div class="callout-text">Every connection is mutually authenticated - drone-to-GCS, drone-to-drone, drone-to-cloud</div>
         </div>
       </div>
 
@@ -1009,8 +1033,10 @@
         </div>
         <div class="s9-benefits">
           <div class="s9-benefit"><div class="s9-benefit-text">Encrypted overlay persists across available communications channels</div></div>
-          <div class="s9-benefit"><div class="s9-benefit-text">Transport agnostic failover between any available channels</div></div>
+          <div class="s9-benefit"><div class="s9-benefit-text">Transport agnostic: seamless failover between any available communications channels</div></div>
+          <div class="s9-benefit"><div class="s9-benefit-text">Low-latency targets for real-time control</div></div>
           <div class="s9-benefit"><div class="s9-benefit-text">Continuous authentication prevents session hijacking during extended flights</div></div>
+          <div class="s9-benefit"><div class="s9-benefit-text">Meets proposed international cybersecurity requirements</div></div>
         </div>
       </div>
 
@@ -1102,6 +1128,11 @@
             <div class="s11-col-title">National Authority, National Data</div>
             <div class="s11-col-text">Deploy within national boundaries, network-enforced data residency, no foreign dependencies</div>
           </div>
+          <div class="s11-col">
+            <div class="s11-col-label">ALLIED INTEROPERABILITY</div>
+            <div class="s11-col-title">Cooperate Without Compromise</div>
+            <div class="s11-col-text">Architecture designed for allied interoperability, share mission data without exposing infrastructure</div>
+          </div>
         </div>
       </div>
 
@@ -1110,12 +1141,12 @@
         <div class="overline">COMPLIANCE</div>
         <h2 class="slide-title">Built for the Standards That Matter</h2>
         <div class="s12-grid">
-          <div class="s12-item"><div class="s12-check"><svg viewBox="0 0 14 14"><polyline points="3 7 6 10 11 4"/></svg></div><div class="s12-item-title">NIST 800-207</div></div>
-          <div class="s12-item"><div class="s12-check"><svg viewBox="0 0 14 14"><polyline points="3 7 6 10 11 4"/></svg></div><div class="s12-item-title">FIPS 140-2 Level 3</div></div>
-          <div class="s12-item"><div class="s12-check"><svg viewBox="0 0 14 14"><polyline points="3 7 6 10 11 4"/></svg></div><div class="s12-item-title">GDPR / Data Residency</div></div>
-          <div class="s12-item"><div class="s12-check"><svg viewBox="0 0 14 14"><polyline points="3 7 6 10 11 4"/></svg></div><div class="s12-item-title">Designed for Allied Interop</div></div>
-          <div class="s12-item"><div class="s12-check"><svg viewBox="0 0 14 14"><polyline points="3 7 6 10 11 4"/></svg></div><div class="s12-item-title">Post-Quantum Ready</div></div>
-          <div class="s12-item"><div class="s12-check"><svg viewBox="0 0 14 14"><polyline points="3 7 6 10 11 4"/></svg></div><div class="s12-item-title">Remote ID Integration Path</div></div>
+          <div class="s12-item"><div class="s12-check"><svg viewBox="0 0 14 14"><polyline points="3 7 6 10 11 4"/></svg></div><div><div class="s12-item-title">NIST 800-207</div><div style="font:400 9px/1.3 var(--font-body);color:var(--text-secondary);margin-top:2px;">Designed to align with zero-trust architecture principles</div></div></div>
+          <div class="s12-item"><div class="s12-check"><svg viewBox="0 0 14 14"><polyline points="3 7 6 10 11 4"/></svg></div><div><div class="s12-item-title">FIPS 140-2 Level 3</div><div style="font:400 9px/1.3 var(--font-body);color:var(--text-secondary);margin-top:2px;">Integrates with FIPS 140-2 Level 3 validated hardware security modules</div></div></div>
+          <div class="s12-item"><div class="s12-check"><svg viewBox="0 0 14 14"><polyline points="3 7 6 10 11 4"/></svg></div><div><div class="s12-item-title">GDPR / Data Residency</div><div style="font:400 9px/1.3 var(--font-body);color:var(--text-secondary);margin-top:2px;">Designed to enable data residency enforcement at the infrastructure layer</div></div></div>
+          <div class="s12-item"><div class="s12-check"><svg viewBox="0 0 14 14"><polyline points="3 7 6 10 11 4"/></svg></div><div><div class="s12-item-title">Designed for Allied Interop</div><div style="font:400 9px/1.3 var(--font-body);color:var(--text-secondary);margin-top:2px;">Architecture designed for allied interoperability</div></div></div>
+          <div class="s12-item"><div class="s12-check"><svg viewBox="0 0 14 14"><polyline points="3 7 6 10 11 4"/></svg></div><div><div class="s12-item-title">Post-Quantum Ready</div><div style="font:400 9px/1.3 var(--font-body);color:var(--text-secondary);margin-top:2px;">Modular cryptographic stack designed for algorithm agility</div></div></div>
+          <div class="s12-item"><div class="s12-check"><svg viewBox="0 0 14 14"><polyline points="3 7 6 10 11 4"/></svg></div><div><div class="s12-item-title">Remote ID Integration Path</div><div style="font:400 9px/1.3 var(--font-body);color:var(--text-secondary);margin-top:2px;">Zero-trust authentication designed to incorporate Remote ID verification</div></div></div>
         </div>
         <div class="callout">
           <div class="callout-text" style="font-size:10px;">Sovereignty by design - deployable within national boundaries, operated under national authority</div>
