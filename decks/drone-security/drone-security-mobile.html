@@ -452,6 +452,18 @@
     .s5-attr-desc { font: 400 10px/1.35 var(--font-body); color: var(--text-secondary); }
 
     /* ===== SLIDE 6 - FOUR LAYERS ===== */
+    .s6-content {
+      display: grid;
+      grid-template-columns: 1fr 200px;
+      gap: 10px;
+      margin-top: 6px;
+      align-items: stretch;
+    }
+    .s6-content .callout {
+      display: flex;
+      align-items: center;
+      margin-top: 0;
+    }
     .s6-layers { display: flex; flex-direction: column; gap: 6px; }
     .s6-bar {
       background: var(--bg-card);
@@ -783,8 +795,8 @@
           </div>
           <div class="s2-right">
             <div class="s2-market">
-              <div class="s2-market-val">$55B+</div>
-              <div class="s2-market-label">Global drone market by 2030</div>
+              <div class="s2-market-val">$17.7B</div>
+              <div class="s2-market-label">projected drone cybersecurity market by 2035, per industry analysts</div>
             </div>
           </div>
         </div>
@@ -821,7 +833,7 @@
           </div>
         </div>
         <div class="callout">
-          <div class="callout-text">A vacuum for sovereign, allied-compatible secure communications infrastructure</div>
+          <div class="callout-text">The result: a vacuum for sovereign, allied-compatible secure communications infrastructure</div>
         </div>
       </div>
 
@@ -867,14 +879,16 @@
       <div class="slide">
         <div class="overline">ARCHITECTURE</div>
         <h2 class="slide-title">Four Layers of AMTD</h2>
-        <div class="s6-layers">
-          <div class="s6-bar"><div class="s6-num">01</div><div><div class="s6-name">Network</div><div class="s6-desc">Dynamic route rotation - paths change every epoch</div></div></div>
-          <div class="s6-bar"><div class="s6-num">02</div><div><div class="s6-name">Compute</div><div class="s6-desc">Workload placement for edge compute on ground stations</div></div></div>
-          <div class="s6-bar"><div class="s6-num">03</div><div><div class="s6-name">Storage</div><div class="s6-desc">Fragmented mission data via secret sharing</div></div></div>
-          <div class="s6-bar"><div class="s6-num">04</div><div><div class="s6-name">Coordination</div><div class="s6-desc">Epoch synchronization - all nodes move without a coordinator</div></div></div>
-        </div>
-        <div class="callout" style="margin-top:6px;">
-          <div class="callout-text">After each epoch, previous reconnaissance is stale. Attack difficulty compounds with each cycle.</div>
+        <div class="s6-content">
+          <div class="s6-layers">
+            <div class="s6-bar"><div class="s6-num">01</div><div><div class="s6-name">Network</div><div class="s6-desc">Dynamic route rotation - paths change every epoch</div></div></div>
+            <div class="s6-bar"><div class="s6-num">02</div><div><div class="s6-name">Compute</div><div class="s6-desc">Workload placement for edge compute on ground stations</div></div></div>
+            <div class="s6-bar"><div class="s6-num">03</div><div><div class="s6-name">Storage</div><div class="s6-desc">Fragmented mission data via secret sharing</div></div></div>
+            <div class="s6-bar"><div class="s6-num">04</div><div><div class="s6-name">Coordination</div><div class="s6-desc">Epoch synchronization - all nodes move without a coordinator</div></div></div>
+          </div>
+          <div class="callout">
+            <div class="callout-text">After each epoch, previous reconnaissance is stale. Attack difficulty compounds with each cycle.</div>
+          </div>
         </div>
       </div>
 
@@ -1194,9 +1208,11 @@
       const totalSlides = 14;
       let current = 0;
       let startX = 0;
+      let startY = 0;
       let startTime = 0;
       let deltaX = 0;
       let isDragging = false;
+      let isHorizontal = null;
 
       // Create dots
       for (let i = 0; i < totalSlides; i++) {
@@ -1223,15 +1239,22 @@
 
       wrapper.addEventListener('touchstart', function(e) {
         startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
         startTime = Date.now();
         deltaX = 0;
         isDragging = true;
+        isHorizontal = null;
         track.classList.remove('animating');
       }, { passive: true });
 
       wrapper.addEventListener('touchmove', function(e) {
         if (!isDragging) return;
         deltaX = e.touches[0].clientX - startX;
+        var deltaY = e.touches[0].clientY - startY;
+        if (isHorizontal === null) {
+          isHorizontal = Math.abs(deltaX) > Math.abs(deltaY);
+        }
+        if (!isHorizontal) return;
         var offset = -(current * wrapper.offsetWidth) + deltaX;
         track.style.transform = 'translateX(' + offset + 'px)';
         e.preventDefault();
